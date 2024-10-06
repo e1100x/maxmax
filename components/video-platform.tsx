@@ -23,7 +23,43 @@ export function VideoPlatform() {
   const [description, setDescription] = useState("")
   const [isGenerating, setIsGenerating] = useState(false)
 
-  const fetchVideos = async () => {
+  const startProgressMonitoring = useCallback((videoList: VideoData[]) => {
+    const processingVideos = videoList.filter(video => video.status === 1)
+    if (processingVideos.length === 0) return
+
+    const monitorProgress = async () => {
+      const idList = processingVideos.map(video => video.id).join(',')
+      try {
+        const response = await fetch(`/api/proxy/api/multimodal/video/processing?idList=${idList}&device_platform=web&app_id=3001&version_code=22201&uuid=eb389e4e-5305-4d98-9e97-fc8c1a978266&device_id=299362015985942537&os_name=Windows&browser_name=chrome&device_memory=8&cpu_core_num=32&browser_language=zh-CN&browser_platform=Win32&screen_width=2560&screen_height=1440&unix=1728230686000`, {
+          headers: {
+            Token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzE2ODU2MTEsInVzZXIiOnsiaWQiOiIyOTkzNjIwMTYyMDQwNTQ1MjkiLCJuYW1lIjoi5bCP6J665bi9NDUyOSIsImF2YXRhciI6Imh0dHBzOi8vY2RuLnlpbmdzaGktYWkuY29tL3Byb2QvdXNlcl9hdmF0YXIvMTcwNjI2NzU5ODg3NTg5OTk1My0xNzMxOTQ1NzA2Njg5NjU4OTZvdmVyc2l6ZS5wbmciLCJkZXZpY2VJRCI6IjI5OTM2MjAxNTk4NTk0MjUzNyIsImlzQW5vbnltb3VzIjp0cnVlfX0.AU7fQQKZEmKNzt4svsGuKbfiwLpS2xfvXDuezDDYMrg"
+          }
+        })
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        const data = await response.json()
+        if (data && data.data && Array.isArray(data.data.videos)) {
+          setVideos(prevVideos => {
+            const updatedVideos = prevVideos.map(video => {
+              const updatedVideo = data.data.videos.find((v: VideoData) => v.id === video.id)
+              return updatedVideo ? { ...video, ...updatedVideo } : video
+            })
+            return updatedVideos
+          })
+          if (data.data.videos.some((video: VideoData) => video.status === 1)) {
+            setTimeout(monitorProgress, 10000)
+          }
+        }
+      } catch (error) {
+        console.error('Error monitoring progress:', error)
+      }
+    }
+
+    monitorProgress()
+  }, [])
+
+  const fetchVideos = useCallback(async () => {
     try {
       const response = await fetch(
         "/api/proxy/v2/api/multimodal/video/my/cursor?type=next&currentID=0&limit=12&scene=list&device_platform=web&app_id=3001&version_code=22201&uuid=eb389e4e-5305-4d98-9e97-fc8c1a978266&device_id=299362015985942537&os_name=Windows&browser_name=chrome&device_memory=8&cpu_core_num=32&browser_language=zh-CN&browser_platform=Win32&screen_width=2560&screen_height=1440&unix=1728231307000",
@@ -51,47 +87,11 @@ export function VideoPlatform() {
     } finally {
       setIsLoading(false)
     }
-  }
-
-  const startProgressMonitoring = useCallback((videoList: VideoData[]) => {
-    const processingVideos = videoList.filter(video => video.status === 1)
-    if (processingVideos.length === 0) return
-
-    const monitorProgress = async () => {
-      const idList = processingVideos.map(video => video.id).join(',')
-      try {
-        const response = await fetch(`/api/proxy/api/multimodal/video/processing?idList=${idList}&device_platform=web&app_id=3001&version_code=22201&uuid=eb389e4e-5305-4d98-9e97-fc8c1a978266&device_id=299362015985942537&os_name=Windows&browser_name=chrome&device_memory=8&cpu_core_num=32&browser_language=zh-CN&browser_platform=Win32&screen_width=2560&screen_height=1440&unix=1728230686000`, {
-          headers: {
-            Token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzE2ODU2MTEsInVzZXIiOnsiaWQiOiIyOTkzNjIwMTYyMDQwNTQ1MjkiLCJuYW1lIjoi5bCP6J665bi9NDUyOSIsImF2YXRhciI6Imh0dHBzOi8vY2RuLnlpbmdzaGktYWkuY29tL3Byb2QvdXNlcl9hdmF0YXIvMTcwNjI2NzU5ODg3NTg5OTk1My0xNzMxOTQ1NzA2Njg5NjU4OTZvdmVyc2l6ZS5wbmciLCJkZXZpY2VJRCI6IjI5OTM2MjAxNTk4NTk0MjUzNyIsImlzQW5vbnltb3VzIjp0cnVlfX0.AU7fQQKZEmKNzt4svsGuKbfiwLpS2xfvXDuezDDYMrg"
-          }
-        })
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`)
-        }
-        const data = await response.json()
-        if (data && data.data && Array.isArray(data.data.videos)) {
-          setVideos(prevVideos => {
-            const updatedVideos = prevVideos.map(video => {
-              const updatedVideo = data.data.videos.find(v => v.id === video.id)
-              return updatedVideo ? { ...video, ...updatedVideo } : video
-            })
-            return updatedVideos
-          })
-          if (data.data.videos.some(video => video.status === 1)) {
-            setTimeout(monitorProgress, 10000)
-          }
-        }
-      } catch (error) {
-        console.error('Error monitoring progress:', error)
-      }
-    }
-
-    monitorProgress()
-  }, [])
+  }, [startProgressMonitoring])
 
   useEffect(() => {
     fetchVideos()
-  }, [])
+  }, [fetchVideos])
 
   const handleGenerate = async () => {
     setIsGenerating(true)

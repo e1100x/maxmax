@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 海螺AI 创意视频平台
 
-## Getting Started
+## 项目简介
 
-First, run the development server:
+海螺AI 创意视频平台是一个基于人工智能的视频生成工具。该平台允许用户通过文字描述来生成创意视频，为内容创作者提供了一个强大而便捷的工具。
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 主要功能
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. **AI 视频生成**：用户可以输入文字描述，系统将自动生成相应的视频内容。
+2. **视频管理**：用户可以查看、管理自己生成的视频。
+3. **实时进度监控**：在视频生成过程中，用户可以实时查看生成进度。
+4. **视频预览**：生成完成后，用户可以直接在平台上预览视频。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 技术栈
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Axios
 
-## Learn More
+## 快速开始
 
-To learn more about Next.js, take a look at the following resources:
+1. 克隆仓库：
+   ```bash
+   git clone [your-repository-url]
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. 安装依赖：
+   ```bash
+   cd minimax
+   npm install
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. 设置环境变量：
+   创建 `.env.local` 文件并添加必要的环境变量。
 
-## Deploy on Vercel
+4. 运行开发服务器：
+   ```bash
+   npm run dev
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+5. 在浏览器中打开 `http://localhost:3000` 查看应用。
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 贡献
+
+欢迎提交 Pull Requests 来改进这个项目。对于重大更改，请先开 issue 讨论您想要改变的内容。
+
+## 许可证
+
+[MIT](https://choosealicense.com/licenses/mit/)
