@@ -1,46 +1,40 @@
-# 海螺AI 创意视频平台
+# Minimax - AI 视频生成前端
 
-## 项目简介
+这是 AI 视频生成平台的前端应用，使用 Next.js 构建。
 
-海螺AI 创意视频平台是一个基于人工智能的视频生成工具。该平台允许用户通过文字描述来生成创意视频，为内容创作者提供了一个强大而便捷的工具。
+## 设置
 
-## 主要功能
-
-1. **AI 视频生成**：用户可以输入文字描述，系统将自动生成相应的视频内容。
-2. **视频管理**：用户可以查看、管理自己生成的视频。
-3. **实时进度监控**：在视频生成过程中，用户可以实时查看生成进度。
-4. **视频预览**：生成完成后，用户可以直接在平台上预览视频。
-
-## 技术栈
-
-- Next.js
-- React
-- TypeScript
-- Tailwind CSS
-- Axios
-
-## 快速开始
-
-1. 克隆仓库：
+1. 安装依赖：
    ```bash
-   git clone [your-repository-url]
-   ```
-
-2. 安装依赖：
-   ```bash
-   cd minimax
    npm install
    ```
 
-3. 设置环境变量：
-   创建 `.env.local` 文件并添加必要的环境变量。
+2. 设置环境变量：
+   在根目录创建一个 `.env.local` 文件，并添加以下变量：
+   ```bash
+   NEXT_PUBLIC_TARGET_URL=https://hailuoai.com
+   NEXT_PUBLIC_API_BASE_URL=/api/proxy
+   NEXT_PUBLIC_TOKEN=
+   NEXT_PUBLIC_YY=
+   ```
 
-4. 运行开发服务器：
+   注意：`NEXT_PUBLIC_TOKEN` 和 `NEXT_PUBLIC_YY` 的值默认为空。如果未设置，应用将使用硬编码的默认值。
+
+3. 运行开发服务器：
    ```bash
    npm run dev
    ```
 
-5. 在浏览器中打开 `http://localhost:3000` 查看应用。
+应用将在 `http://localhost:3000` 上可用。
+
+## 使用
+
+- 主要组件 `VideoPlatform`（位于 `components/video-platform.tsx`）处理视频生成和显示功能。
+- API 调用通过代理服务器进行，代理服务器需要单独设置。
+
+## 安全注意事项
+
+确保在生产环境中妥善保护敏感信息，如令牌。当前使用环境变量的设置适用于开发，但在生产环境中可能需要增强安全措施。
 
 ## 贡献
 
